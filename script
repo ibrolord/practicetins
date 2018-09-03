@@ -1,0 +1,35 @@
+#!/bin/bash
+echo "####################"
+echo "Test switches"
+echo "####################"
+read -p "What is the store #?: " STORE
+ping "m"$STORE"sps01.unix.ctcwest.ctc" -c 2 
+stor="m"$STORE"sps01.unix.ctcwest.ctc"
+stor1=`getent hosts $stor | awk {'print $1'}`
+stor3=`echo "$stor1" | cut -d "." -f1-3`
+
+echo "######"
+echo "IP is $stor3"
+while true; do
+	echo
+	echo "Testing switches and whatnot"
+	echo "1) Ping the store blades"
+	echo "2) ssh into the switches"
+	echo "3) send cisco cmds"
+	echo 
+	read sup
+	
+	case $sup in 
+		1)	echo "Testing switches and whatnot"
+			echo 
+			echo "will ping the blades and whatnat"
+			echo "pinging blade 1"
+			pinga(){
+				ping $stor3.228 -c 2 && echo "Blde 1 SIMC failed" ; ping $stor3.229 -c 2 && echo "Blade 2 SIMC failed" ; ping $stor3.253 -c 2 && echo "Blade 1 ESX failed" ; ping $stor3.254 -c 2 && echo "Blade 2 ESX failed"
+}
+
+
+pinga	
+;;
+esac
+done
